@@ -1,9 +1,10 @@
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
+import { ThemeStyles } from '@/types/theme';
 
 interface ChatHeaderProps {
-  styles: any;
+  styles: ThemeStyles;
   theme: string;
   onSettingsClick: () => void;
 }

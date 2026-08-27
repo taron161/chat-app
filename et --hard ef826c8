@@ -1,0 +1,20 @@
+[33m26ea1ca[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m Remove setState from useEffect in auth page
+[33mef6d498[m Add K-pop styling to settings modal
+[33m94dd85c[m Fix ChatMessages typing props
+[33mef826c8[m Add K-pop theme with equalizer and musical animations
+[33m5ace705[m Fix typing indicator with global storage
+[33m95bd224[m Add typing indicator feature
+[33m65bde02[m Fix TypeScript error
+[33m239bf67[m Fix TypeScript error in messages route
+[33m6c521ad[m Add real-time message updates with polling
+[33m92bc3be[m Add PWA icons
+[33m719b485[m Add PWA icons
+[33m64c01ea[m Fix Prisma db push for Vercel
+[33m70b6d2c[m Add detailed error111 logging
+[33m0c32f2f[m Add detailed error logging
+[33m031fa1d[m Fix Prisma client initialization for Vercel
+[33m90e80ef[m Add better error logging
+[33m2e102da[m Fix Vercel deployment
+[33mfc1e6d3[m Add PostgreSQL support for Vercel deployment
+[33m3927850[m push
+[33m20c72c5[m Initial commit from Create Next App

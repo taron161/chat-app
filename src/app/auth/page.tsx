@@ -1,24 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
+import dynamic from 'next/dynamic';
 
-export default function AuthPage() {
+function AuthPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [mode, setMode] = useState<'login' | 'register'>('login');
-  const [mounted, setMounted] = useState(false);
   const { login, register, isLoading } = useAuth();
   const { theme } = useTheme();
   const router = useRouter();
-
-  useEffect(() => {
-    setMounted(true);
-    console.log('Auth page mounted, theme:', theme);
-  }, [theme]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,24 +105,13 @@ export default function AuthPage() {
 
   const styles = getThemeStyles();
 
-  // Показываем заглузку до монтирования
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-[#0a0a0f] flex items-center justify-center">
-        <div className="text-gray-400 text-xl animate-pulse">
-          Loading...
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className={`min-h-screen relative flex items-center justify-center p-4 ${styles.bg}`}>
       <div className={`relative z-10 w-full max-w-md backdrop-blur-md border p-8 ${styles.card}`}>
         
         <div className="text-center mb-8">
           <div className="text-6xl mb-4 opacity-50">
-            {theme === 'cyberpunk' ? '🌆' : theme === 'retro' ? '🕹️' : theme === 'rainy' ? '🌧️' : '👾'}
+            {theme === 'cyberpunk' ? '🌆' : theme === 'retro' ? '🕹️' : theme === 'rainy' ? '🌧️' : theme === '8bit' ? '👾' : '🎤'}
           </div>
           <h1 className={`text-3xl font-bold mb-2 ${styles.title}`}>
             {mode === 'login' ? 'System Access' : 'Registration'}
@@ -198,3 +182,7 @@ export default function AuthPage() {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(AuthPage), {
+  ssr: false
+});

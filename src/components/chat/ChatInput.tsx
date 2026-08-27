@@ -1,11 +1,13 @@
 'use client';
 
+import { ThemeStyles } from "@/types/theme";
+
 interface ChatInputProps {
   value: string;
   onChange: (value: string) => void;
   onSend: () => void;
   isSending: boolean;
-  styles: any;
+  styles: ThemeStyles;
   theme: string;
 }
 

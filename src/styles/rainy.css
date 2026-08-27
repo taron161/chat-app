@@ -25,25 +25,7 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
     0 0 5px rgba(74, 107, 138, 0.5);
 }
 
-/* Rain Effects - для всех страниц */
-.rain-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.raindrop {
-  position: absolute;
-  width: 1px;
-  background: linear-gradient(transparent, #4a6b8a);
-  animation: rain-fall linear infinite;
-}
-
+/* ============ GLOBAL KEYFRAMES ============ */
 @keyframes rain-fall {
   0% {
     transform: translateY(-100px);
@@ -53,16 +35,13 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
   }
 }
 
-.lightning-flash {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(200, 216, 232, 0.1);
-  pointer-events: none;
-  z-index: 2;
-  animation: lightning 10s infinite;
+@keyframes rain-fall-mobile {
+  0% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(calc(90vh));
+  }
 }
 
 @keyframes lightning {
@@ -86,6 +65,58 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
   }
 }
 
+@keyframes lightning-mobile {
+  0%, 100% {
+    opacity: 0;
+  }
+  92% {
+    opacity: 0;
+  }
+  93% {
+    opacity: 0.8;
+  }
+  94% {
+    opacity: 0;
+  }
+  95% {
+    opacity: 0.5;
+  }
+  96% {
+    opacity: 0;
+  }
+}
+
+/* ============ RAIN EFFECTS (GLOBAL) ============ */
+.rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.raindrop {
+  position: absolute;
+  width: 1px;
+  background: linear-gradient(transparent, #4a6b8a);
+  animation: rain-fall linear infinite;
+}
+
+.lightning-flash {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(200, 216, 232, 0.1);
+  pointer-events: none;
+  z-index: 2;
+  animation: lightning 10s infinite;
+}
+
 .fog {
   position: fixed;
   top: 0;
@@ -101,7 +132,7 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
   z-index: 1;
 }
 
-/* Mobile/Tablet Rain Effects (<=1024px) - только для главной */
+/* ============ MOBILE EFFECTS (<=1024px) ============ */
 @media (max-width: 1024px) {
   .rain-container-mobile {
     position: absolute;
@@ -123,15 +154,6 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
     opacity: 0.6;
   }
 
-  @keyframes rain-fall-mobile {
-    0% {
-      transform: translateY(-20px);
-    }
-    100% {
-      transform: translateY(calc(90vh));
-    }
-  }
-
   .lightning-in-header {
     position: absolute;
     top: 0;
@@ -143,27 +165,6 @@ body.theme-rainy ::-webkit-scrollbar-thumb {
     z-index: 3;
     opacity: 0;
     transition: opacity 0.1s ease;
-    animation: lightning-flash-header 5s infinite;
-  }
-
-  @keyframes lightning-flash-header {
-    0%, 100% {
-      opacity: 0;
-    }
-    92% {
-      opacity: 0;
-    }
-    93% {
-      opacity: 0.8;
-    }
-    94% {
-      opacity: 0;
-    }
-    95% {
-      opacity: 0.5;
-    }
-    96% {
-      opacity: 0;
-    }
+    animation: lightning-mobile 5s infinite;
   }
 }

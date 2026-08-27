@@ -8,50 +8,22 @@ export default function KpopEffects() {
   const { theme } = useTheme();
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (theme !== 'kpop') return;
+  const cleanupEffects = () => {
+    const effectsContainer = document.getElementById('kpop-effects-container');
+    if (effectsContainer) effectsContainer.remove();
 
-    let timeoutId: NodeJS.Timeout;
-    
-    timeoutId = setTimeout(() => {
-      const isMobile = window.innerWidth <= 1024;
-      const isAuthPage = pathname === '/auth';
-      
-      cleanupEffects();
+    const effectsMobile = document.getElementById('kpop-effects-mobile');
+    if (effectsMobile) effectsMobile.remove();
 
-      if (!isMobile || isAuthPage) {
-        createDesktopEffects();
-      } else {
-        createMobileEffects();
-      }
-      
-      // Создаем эквалайзер в шапке для всех версий
-      createHeaderEqualizer();
-    }, 100);
+    const headerEffects = document.getElementById('kpop-header-effects');
+    if (headerEffects) headerEffects.remove();
 
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const newIsMobile = window.innerWidth <= 1024;
-        const isAuthPage = pathname === '/auth';
-        cleanupEffects();
-        if (newIsMobile && !isAuthPage) {
-          createMobileEffects();
-        } else {
-          createDesktopEffects();
-        }
-        createHeaderEqualizer();
-      }, 100);
-    };
+    const equalizer = document.getElementById('kpop-equalizer');
+    if (equalizer) equalizer.remove();
 
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleResize);
-      cleanupEffects();
-    };
-  }, [theme, pathname]);
+    const authEqualizer = document.getElementById('kpop-auth-equalizer');
+    if (authEqualizer) authEqualizer.remove();
+  };
 
   const createHeaderEqualizer = () => {
     const header = document.querySelector('.chat-header') as HTMLElement;
@@ -63,7 +35,6 @@ export default function KpopEffects() {
       equalizer.className = 'kpop-equalizer';
       equalizer.id = 'kpop-equalizer';
       
-      // Создаем полоски эквалайзера
       for (let i = 0; i < 20; i++) {
         const bar = document.createElement('div');
         bar.className = 'kpop-eq-bar';
@@ -76,8 +47,30 @@ export default function KpopEffects() {
     }
   };
 
+  const createAuthEqualizer = () => {
+    const authCard = document.querySelector('.relative.z-10.w-full.max-w-md') as HTMLElement;
+    if (!authCard) return;
+
+    let equalizer = document.getElementById('kpop-auth-equalizer') as HTMLDivElement;
+    if (!equalizer) {
+      equalizer = document.createElement('div');
+      equalizer.className = 'kpop-auth-equalizer';
+      equalizer.id = 'kpop-auth-equalizer';
+      
+      for (let i = 0; i < 15; i++) {
+        const bar = document.createElement('div');
+        bar.className = 'kpop-eq-bar';
+        bar.style.animationDelay = (Math.random() * 1) + 's';
+        bar.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+        equalizer.appendChild(bar);
+      }
+      
+      authCard.appendChild(equalizer);
+    }
+  };
+
   const createDesktopEffects = () => {
-    console.log('Creating desktop K-pop effects');
+    console.log('Creating desktop K-pop effects (body)');
     
     let effectsContainer = document.getElementById('kpop-effects-container') as HTMLDivElement;
     if (!effectsContainer) {
@@ -87,7 +80,7 @@ export default function KpopEffects() {
       document.body.appendChild(effectsContainer);
     }
 
-    const hearts = ['💖', '💕', '💗', '💓', '🩷', '💘'];
+    const hearts = ['💖', '💕', '💗', '💓', '💘', '❤️'];
     const numHearts = 20;
     
     for (let i = 0; i < numHearts; i++) {
@@ -131,7 +124,7 @@ export default function KpopEffects() {
   };
 
   const createMobileEffects = () => {
-    console.log('Creating mobile K-pop effects');
+    console.log('Creating mobile K-pop effects (chat container)');
     
     const chatContainer = document.querySelector('.relative.z-10.w-full.max-w-4xl') as HTMLElement;
     
@@ -144,7 +137,7 @@ export default function KpopEffects() {
         chatContainer.appendChild(effectsContainer);
       }
 
-      const hearts = ['💖', '💕', '💗', '💓', '🩷', '💘'];
+      const hearts = ['💖', '💕', '💗', '💓', '💘', '❤️'];
       const numHearts = 15;
       
       for (let i = 0; i < numHearts; i++) {
@@ -169,21 +162,21 @@ export default function KpopEffects() {
         header.appendChild(headerEffects);
       }
 
-      const mics = ['🎤', '🎙️'];
+      const mics = ['🎤', '🎤'];
       for (let i = 0; i < 3; i++) {
         const mic = document.createElement('div');
         mic.className = 'kpop-mic';
-        mic.textContent = mics[Math.floor(Math.random() * mics.length)];
+        mic.textContent = mics[i % mics.length];
         mic.style.left = (20 + i * 30) + '%';
         mic.style.animationDelay = (i * 0.5) + 's';
         headerEffects.appendChild(mic);
       }
 
-      const notes = ['🎵', '🎶', '🎼'];
+      const notes = ['🎵', '🎶', '🎵'];
       for (let i = 0; i < 4; i++) {
         const note = document.createElement('div');
         note.className = 'kpop-note';
-        note.textContent = notes[Math.floor(Math.random() * notes.length)];
+        note.textContent = notes[i % notes.length];
         note.style.left = (10 + i * 25) + '%';
         note.style.animationDelay = (i * 0.3) + 's';
         headerEffects.appendChild(note);
@@ -193,17 +186,17 @@ export default function KpopEffects() {
       for (let i = 0; i < 3; i++) {
         const star = document.createElement('div');
         star.className = 'kpop-star-header';
-        star.textContent = stars[Math.floor(Math.random() * stars.length)];
+        star.textContent = stars[i % stars.length];
         star.style.left = (30 + i * 20) + '%';
         star.style.animationDelay = (i * 0.7) + 's';
         headerEffects.appendChild(star);
       }
 
-      const instruments = ['🎸', '🎹', '🥁', '🎻'];
+      const instruments = ['🎸', '🎹'];
       for (let i = 0; i < 2; i++) {
         const instrument = document.createElement('div');
         instrument.className = 'kpop-instrument';
-        instrument.textContent = instruments[Math.floor(Math.random() * instruments.length)];
+        instrument.textContent = instruments[i % instruments.length];
         instrument.style.left = (15 + i * 40) + '%';
         instrument.style.animationDelay = (i * 1) + 's';
         headerEffects.appendChild(instrument);
@@ -211,19 +204,57 @@ export default function KpopEffects() {
     }
   };
 
-  const cleanupEffects = () => {
-    const effectsContainer = document.getElementById('kpop-effects-container');
-    if (effectsContainer) effectsContainer.remove();
+  useEffect(() => {
+    if (theme !== 'kpop') return;
 
-    const effectsMobile = document.getElementById('kpop-effects-mobile');
-    if (effectsMobile) effectsMobile.remove();
+    let timeoutId: NodeJS.Timeout;
+    
+    timeoutId = setTimeout(() => {
+      const isMobile = window.innerWidth <= 1024;
+      const isAuthPage = pathname === '/auth';
+      
+      cleanupEffects();
 
-    const headerEffects = document.getElementById('kpop-header-effects');
-    if (headerEffects) headerEffects.remove();
+      if (!isMobile || isAuthPage) {
+        createDesktopEffects();
+      } else {
+        createMobileEffects();
+      }
+      
+      if (isAuthPage) {
+        createAuthEqualizer();
+      } else {
+        createHeaderEqualizer();
+      }
+    }, 100);
 
-    const equalizer = document.getElementById('kpop-equalizer');
-    if (equalizer) equalizer.remove();
-  };
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const newIsMobile = window.innerWidth <= 1024;
+        const isAuthPage = pathname === '/auth';
+        cleanupEffects();
+        if (newIsMobile && !isAuthPage) {
+          createMobileEffects();
+        } else {
+          createDesktopEffects();
+        }
+        if (isAuthPage) {
+          createAuthEqualizer();
+        } else {
+          createHeaderEqualizer();
+        }
+      }, 100);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+      cleanupEffects();
+    };
+  }, [theme, pathname]);
 
   return null;
 }

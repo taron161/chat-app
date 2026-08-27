@@ -19,13 +19,8 @@ function Home() {
   const { messages, error, loadMessages, loadNewMessages, sendMessage } = useMessages(user?.id);
   const { typingUsers, loadTypingUsers, handleTyping, sendTypingStatus } = useTyping(user?.id, user?.username, user?.name);
   const [inputValue, setInputValue] = useState('');
-  const [mounted, setMounted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -34,7 +29,7 @@ function Home() {
   }, [user, isLoading, router]);
 
   useEffect(() => {
-    if (mounted && user) {
+    if (user) {
       loadMessages();
       loadTypingUsers();
       
@@ -45,7 +40,7 @@ function Home() {
       
       return () => clearInterval(interval);
     }
-  }, [mounted, user]);
+  }, [user]);
 
   const handleSend = async () => {
     if (!inputValue.trim() || isSending) return;
@@ -67,14 +62,6 @@ function Home() {
       setIsSending(false);
     }
   };
-
-  if (!mounted) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl animate-pulse">Loading...</div>
-      </div>
-    );
-  }
 
   return (
     <div className={`min-h-screen flex items-center justify-center p-4 ${styles.bg}`}>

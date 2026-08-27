@@ -3,10 +3,11 @@
 import { useAuth } from '@/context/AuthContext';
 import { Message } from '@/hooks/useMessages';
 import { TypingUser } from '@/hooks/useTyping';
+import { ThemeStyles } from '@/types/theme';
 
 interface ChatMessagesProps {
   messages: Message[];
-  styles: any;
+  styles: ThemeStyles;
   theme: string;
   error: string;
   typingUsers: TypingUser[];

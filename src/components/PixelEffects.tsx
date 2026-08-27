@@ -8,56 +8,61 @@ export default function PixelEffects() {
   const { theme } = useTheme();
   const pathname = usePathname();
 
-  useEffect(() => {
-    if (theme !== '8bit') return;
+  const cleanupEffects = () => {
+    const effectsContainer = document.getElementById('pixel-effects-container');
+    if (effectsContainer) effectsContainer.remove();
 
-    let timeoutId: NodeJS.Timeout;
-    
-    // Добавляем задержку для полной загрузки DOM
-    timeoutId = setTimeout(() => {
-      const isMobile = window.innerWidth <= 1024;
-      const isAuthPage = pathname === '/auth';
-      
-      // Очищаем предыдущие эффекты
-      cleanupEffects();
+    const particlesContainer = document.getElementById('mobile-particles-container');
+    if (particlesContainer) particlesContainer.remove();
 
-      if (!isMobile || isAuthPage) {
-        // Десктопная версия или страница авторизации
-        createDesktopEffects();
-      } else {
-        // Мобильная версия на главной
-        createMobileEffects();
-      }
-    }, 100);
+    const headerFigures = document.getElementById('header-pixel-figures');
+    if (headerFigures) headerFigures.remove();
+  };
 
-    // Обработчик изменения размера окна
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        const newIsMobile = window.innerWidth <= 1024;
-        const isAuthPage = pathname === '/auth';
-        cleanupEffects();
-        if (newIsMobile && !isAuthPage) {
-          createMobileEffects();
-        } else {
-          createDesktopEffects();
-        }
-      }, 100);
+  const createPixelFigure = (type: string, color: string) => {
+    const patterns: Record<string, number[][]> = {
+      star: [
+        [0,0,1,0,0],
+        [0,1,1,1,0],
+        [1,1,1,1,1],
+        [0,1,1,1,0],
+        [0,0,1,0,0],
+      ],
+      heart: [
+        [0,1,0,1,0],
+        [1,1,1,1,1],
+        [1,1,1,1,1],
+        [0,1,1,1,0],
+        [0,0,1,0,0],
+      ],
+      coin: [
+        [0,1,1,1,0],
+        [1,1,1,1,1],
+        [1,1,1,1,1],
+        [0,1,1,1,0],
+        [0,0,1,0,0],
+      ],
     };
 
-    window.addEventListener('resize', handleResize);
+    const pattern = patterns[type];
+    if (!pattern) return '';
 
-    return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener('resize', handleResize);
-      cleanupEffects();
-    };
-  }, [theme, pathname]);
+    return `
+      <div class="pixel-figure-grid">
+        ${pattern.map(row => `
+          <div class="pixel-figure-row">
+            ${row.map(cell => `
+              <div class="pixel-figure-cell ${cell ? 'active' : ''}" style="background-color: ${cell ? color : 'transparent'}"></div>
+            `).join('')}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  };
 
   const createDesktopEffects = () => {
-    console.log('Creating desktop 8-bit effects');
+    console.log('Creating desktop 8-bit effects (body)');
     
-    // Проверяем, существует ли уже контейнер
     let pixelContainer = document.getElementById('pixel-effects-container') as HTMLDivElement;
     if (!pixelContainer) {
       pixelContainer = document.createElement('div');
@@ -123,13 +128,11 @@ export default function PixelEffects() {
   };
 
   const createMobileEffects = () => {
-    console.log('Creating mobile 8-bit effects');
+    console.log('Creating mobile 8-bit effects (chat container)');
     
-    // Находим основной контейнер чата
     const chatMainContainer = document.querySelector('.relative.z-10.w-full.max-w-4xl') as HTMLElement;
     
     if (chatMainContainer) {
-      // Создаем контейнер для частиц поверх окна чата
       let particlesContainer = document.getElementById('mobile-particles-container') as HTMLDivElement;
       if (!particlesContainer) {
         particlesContainer = document.createElement('div');
@@ -138,7 +141,6 @@ export default function PixelEffects() {
         chatMainContainer.appendChild(particlesContainer);
       }
 
-      // Создаем поднимающиеся частицы снизу
       const particles = ['■', '□', '▪', '▫', '•'];
       const numParticles = 30;
       
@@ -186,57 +188,49 @@ export default function PixelEffects() {
     }
   };
 
-  const createPixelFigure = (type: string, color: string) => {
-    const patterns: Record<string, number[][]> = {
-      star: [
-        [0,0,1,0,0],
-        [0,1,1,1,0],
-        [1,1,1,1,1],
-        [0,1,1,1,0],
-        [0,0,1,0,0],
-      ],
-      heart: [
-        [0,1,0,1,0],
-        [1,1,1,1,1],
-        [1,1,1,1,1],
-        [0,1,1,1,0],
-        [0,0,1,0,0],
-      ],
-      coin: [
-        [0,1,1,1,0],
-        [1,1,1,1,1],
-        [1,1,1,1,1],
-        [0,1,1,1,0],
-        [0,0,1,0,0],
-      ],
+  useEffect(() => {
+    if (theme !== '8bit') return;
+
+    console.log('PixelEffects: pathname =', pathname, 'isAuth =', pathname === '/auth');
+
+    let timeoutId: NodeJS.Timeout;
+    
+    timeoutId = setTimeout(() => {
+      const isMobile = window.innerWidth <= 1024;
+      const isAuthPage = pathname === '/auth';
+      
+      cleanupEffects();
+
+      // На странице авторизации ВСЕГДА фоновые эффекты
+      if (!isMobile || isAuthPage) {
+        createDesktopEffects();
+      } else {
+        createMobileEffects();
+      }
+    }, 100);
+
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        const newIsMobile = window.innerWidth <= 1024;
+        const isAuthPage = pathname === '/auth';
+        cleanupEffects();
+        if (newIsMobile && !isAuthPage) {
+          createMobileEffects();
+        } else {
+          createDesktopEffects();
+        }
+      }, 100);
     };
 
-    const pattern = patterns[type];
-    if (!pattern) return '';
+    window.addEventListener('resize', handleResize);
 
-    return `
-      <div class="pixel-figure-grid">
-        ${pattern.map(row => `
-          <div class="pixel-figure-row">
-            ${row.map(cell => `
-              <div class="pixel-figure-cell ${cell ? 'active' : ''}" style="background-color: ${cell ? color : 'transparent'}"></div>
-            `).join('')}
-          </div>
-        `).join('')}
-      </div>
-    `;
-  };
-
-  const cleanupEffects = () => {
-    const effectsContainer = document.getElementById('pixel-effects-container');
-    if (effectsContainer) effectsContainer.remove();
-
-    const particlesContainer = document.getElementById('mobile-particles-container');
-    if (particlesContainer) particlesContainer.remove();
-
-    const headerFigures = document.getElementById('header-pixel-figures');
-    if (headerFigures) headerFigures.remove();
-  };
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', handleResize);
+      cleanupEffects();
+    };
+  }, [theme, pathname]);
 
   return null;
 }

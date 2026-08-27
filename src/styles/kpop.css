@@ -26,7 +26,145 @@ body.theme-kpop ::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 0 8px rgba(255, 107, 157, 0.5);
 }
 
-/* K-pop Equalizer - для всех версий */
+/* ============ GLOBAL KEYFRAMES ============ */
+@keyframes eq-bounce {
+  0%, 100% {
+    height: 5px;
+  }
+  25% {
+    height: 15px;
+  }
+  50% {
+    height: 8px;
+  }
+  75% {
+    height: 18px;
+  }
+}
+
+@keyframes float-heart {
+  0% {
+    transform: translateY(100vh) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle-twinkle {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes star-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-heart-mobile {
+  0% {
+    transform: translateY(0) rotate(0deg) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-90vh) rotate(360deg) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes mic-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(10deg);
+  }
+}
+
+@keyframes note-float {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-15px) rotate(20deg);
+    opacity: 1;
+  }
+}
+
+@keyframes star-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+}
+
+@keyframes instrument-swing {
+  0%, 100% {
+    transform: rotate(-15deg);
+  }
+  50% {
+    transform: rotate(15deg);
+  }
+}
+
+/* ============ K-POP EFFECTS (GLOBAL) ============ */
+.kpop-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.kpop-heart {
+  position: absolute;
+  animation: float-heart linear infinite;
+  opacity: 0.3;
+}
+
+.kpop-sparkle {
+  position: absolute;
+  animation: sparkle-twinkle 2s ease-in-out infinite;
+}
+
+.kpop-star {
+  position: absolute;
+  animation: star-spin 5s linear infinite;
+}
+
+/* K-pop Equalizer */
 .kpop-equalizer {
   position: absolute;
   bottom: 0;
@@ -50,89 +188,33 @@ body.theme-kpop ::-webkit-scrollbar-thumb:hover {
   transform-origin: bottom;
 }
 
-@keyframes eq-bounce {
-  0%, 100% {
-    height: 5px;
-  }
-  25% {
-    height: 15px;
-  }
-  50% {
-    height: 8px;
-  }
-  75% {
-    height: 18px;
-  }
+/* Auth Equalizer */
+.kpop-auth-equalizer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 25px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.5;
+  border-radius: 0 0 20px 20px;
+  overflow: hidden;
 }
 
-/* Desktop K-pop Effects (>1024px) */
-@media (min-width: 1025px) {
-  .kpop-effects {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    overflow: hidden;
-  }
-
-  .kpop-heart {
-    position: absolute;
-    animation: float-heart linear infinite;
-    opacity: 0.3;
-  }
-
-  @keyframes float-heart {
-    0% {
-      transform: translateY(100vh) rotate(0deg) scale(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.3;
-    }
-    90% {
-      opacity: 0.3;
-    }
-    100% {
-      transform: translateY(-100px) rotate(360deg) scale(1);
-      opacity: 0;
-    }
-  }
-
-  .kpop-sparkle {
-    position: absolute;
-    animation: sparkle-twinkle 2s ease-in-out infinite;
-  }
-
-  @keyframes sparkle-twinkle {
-    0%, 100% {
-      opacity: 0;
-      transform: scale(0);
-    }
-    50% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .kpop-star {
-    position: absolute;
-    animation: star-spin 5s linear infinite;
-  }
-
-  @keyframes star-spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+.kpop-auth-equalizer .kpop-eq-bar {
+  width: 5px;
+  background: linear-gradient(180deg, #ff6b9d, #c44569);
+  border-radius: 2px 2px 0 0;
+  animation: eq-bounce 1s ease-in-out infinite;
+  transform-origin: bottom;
 }
 
-/* Mobile/Tablet K-pop Effects (<=1024px) */
+/* ============ MOBILE/TABLET EFFECTS (<=1024px) ============ */
 @media (max-width: 1024px) {
   .kpop-effects-mobile {
     position: absolute;
@@ -152,23 +234,6 @@ body.theme-kpop ::-webkit-scrollbar-thumb:hover {
     opacity: 0.3;
   }
 
-  @keyframes float-heart-mobile {
-    0% {
-      transform: translateY(0) rotate(0deg) scale(0);
-      opacity: 0;
-    }
-    10% {
-      opacity: 0.3;
-    }
-    90% {
-      opacity: 0.3;
-    }
-    100% {
-      transform: translateY(-90vh) rotate(360deg) scale(1);
-      opacity: 0;
-    }
-  }
-
   .kpop-header-effects {
     position: absolute;
     top: 0;
@@ -186,30 +251,10 @@ body.theme-kpop ::-webkit-scrollbar-thumb:hover {
     animation: mic-bounce 1s ease-in-out infinite;
   }
 
-  @keyframes mic-bounce {
-    0%, 100% {
-      transform: translateY(0) rotate(-10deg);
-    }
-    50% {
-      transform: translateY(-10px) rotate(10deg);
-    }
-  }
-
   .kpop-note {
     position: absolute;
     top: 30%;
     animation: note-float 2s ease-in-out infinite;
-  }
-
-  @keyframes note-float {
-    0%, 100% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 0.5;
-    }
-    50% {
-      transform: translateY(-15px) rotate(20deg);
-      opacity: 1;
-    }
   }
 
   .kpop-star-header {
@@ -218,29 +263,9 @@ body.theme-kpop ::-webkit-scrollbar-thumb:hover {
     animation: star-pulse 1.5s ease-in-out infinite;
   }
 
-  @keyframes star-pulse {
-    0%, 100% {
-      transform: scale(1);
-      opacity: 0.7;
-    }
-    50% {
-      transform: scale(1.3);
-      opacity: 1;
-    }
-  }
-
   .kpop-instrument {
     position: absolute;
     top: 60%;
     animation: instrument-swing 2s ease-in-out infinite;
-  }
-
-  @keyframes instrument-swing {
-    0%, 100% {
-      transform: rotate(-15deg);
-    }
-    50% {
-      transform: rotate(15deg);
-    }
   }
 }

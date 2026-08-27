@@ -6,54 +6,26 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const after = searchParams.get('after');
     
-    let messages: any[] = [];
-    
-    if (after) {
-      // Загружаем только новые сообщения
-      const lastMessage = await prisma.message.findUnique({
-        where: { id: after },
-      });
-      
-      if (lastMessage) {
-        messages = await prisma.message.findMany({
-          where: {
-            createdAt: {
-              gt: lastMessage.createdAt,
-            },
-          },
-          include: {
-            user: {
-              select: {
-                id: true,
-                username: true,
-                name: true,
-                avatar: true,
-              },
-            },
-          },
-          orderBy: {
-            createdAt: 'asc',
-          },
-        });
-      }
-    } else {
-      // Загружаем все сообщения
-      messages = await prisma.message.findMany({
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              name: true,
-              avatar: true,
-            },
+    const messages = await prisma.message.findMany({
+      where: after ? {
+        createdAt: {
+          gt: (await prisma.message.findUnique({ where: { id: after } }))?.createdAt || new Date(0),
+        },
+      } : undefined,
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            avatar: true,
           },
         },
-        orderBy: {
-          createdAt: 'asc',
-        },
-      });
-    }
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+    });
 
     return NextResponse.json({ messages });
   } catch (error) {

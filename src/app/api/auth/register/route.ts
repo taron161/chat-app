@@ -4,45 +4,38 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  console.log('Начало регистрации...');
+  console.log('Registration attempt...');
+  console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'set' : 'not set');
   
   try {
     const body = await request.json();
-    console.log('Получены данные:', body);
-    
     const { username, password } = body;
 
     if (!username || !password) {
-      console.log('Отсутствуют username или password');
       return NextResponse.json(
-        { error: 'Необходимо указать логин и пароль' },
+        { error: 'Username and password are required' },
         { status: 400 }
       );
     }
 
-    console.log('Проверяем существующего пользователя...');
     const existingUser = await prisma.user.findUnique({
       where: { username },
     });
 
     if (existingUser) {
-      console.log('Пользователь уже существует');
       return NextResponse.json(
-        { error: 'Пользователь уже существует' },
+        { error: 'User already exists' },
         { status: 400 }
       );
     }
 
-    console.log('Создаем пользователя...');
     const user = await prisma.user.create({
       data: {
         username,
         email: `${username}@nightcity.com`,
-        password: password,
+        password,
       },
     });
-
-    console.log('Пользователь создан:', user.id);
 
     return NextResponse.json({
       user: {
@@ -54,9 +47,13 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Ошибка при регистрации:', error);
+    console.error('Registration error:', error);
     return NextResponse.json(
-      { error: `Ошибка при регистрации: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}` },
+      { 
+        error: 'Registration failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+      },
       { status: 500 }
     );
   }

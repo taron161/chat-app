@@ -4,45 +4,37 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function POST(request: NextRequest) {
-  console.log('Начало входа...');
+  console.log('Login attempt...');
+  console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'set' : 'not set');
   
   try {
     const body = await request.json();
-    console.log('Получены данные:', body);
-    
     const { username, password } = body;
 
     if (!username || !password) {
-      console.log('Отсутствуют username или password');
       return NextResponse.json(
-        { error: 'Необходимо указать логин и пароль' },
+        { error: 'Username and password are required' },
         { status: 400 }
       );
     }
 
-    console.log('Ищем пользователя...');
     const user = await prisma.user.findUnique({
       where: { username },
     });
 
     if (!user) {
-      console.log('Пользователь не найден');
       return NextResponse.json(
-        { error: 'Пользователь не найден' },
+        { error: 'User not found' },
         { status: 401 }
       );
     }
 
-    console.log('Проверяем пароль...');
     if (password !== user.password) {
-      console.log('Неверный пароль');
       return NextResponse.json(
-        { error: 'Неверный пароль' },
+        { error: 'Invalid password' },
         { status: 401 }
       );
     }
-
-    console.log('Вход успешен');
 
     return NextResponse.json({
       user: {
@@ -54,9 +46,13 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Ошибка при входе:', error);
+    console.error('Login error:', error);
     return NextResponse.json(
-      { error: `Ошибка при входе: ${error instanceof Error ? error.message : 'Неизвестная ошибка'}` },
+      { 
+        error: 'Login failed',
+        details: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined,
+      },
       { status: 500 }
     );
   }

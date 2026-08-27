@@ -17,7 +17,9 @@ export default function LogoutButton() {
           ? 'bg-[#330000] text-[#ff3333] border border-[#ff3333] hover:bg-[#440000]'
           : theme === 'rainy'
           ? 'bg-[#1a1015] text-[#c08090] border border-[#8a4a5a]/50 hover:bg-[#2a1515]'
-          : 'bg-[#330000] text-[#ff0000] border border-[#ff0000] hover:bg-[#440000]'
+          : theme === '8bit'
+          ? 'bg-[#330000] text-[#ff0000] border border-[#ff0000] hover:bg-[#440000]'
+          : 'bg-red-50 text-red-400 border border-red-200 hover:bg-red-100'
       }`}
     >
       Logout

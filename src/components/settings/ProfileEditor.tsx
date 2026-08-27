@@ -75,15 +75,16 @@ export default function ProfileEditor() {
         ? 'border-[#33ff33] bg-[#003300]'
         : theme === 'rainy'
         ? 'border-[#4a6b8a]/30 bg-[#1a2533]/50'
-        : 'border-[#ffffff] bg-[#1a1a1a]'
+        : theme === '8bit'
+        ? 'border-[#ffffff] bg-[#1a1a1a]'
+        : 'border-pink-200 bg-pink-50/50'
     }`}>
       <h3 className={`text-sm font-bold mb-3 uppercase ${
-        theme === 'retro' ? 'text-[#33ff33]' : theme === '8bit' ? 'text-[#ffffff]' : 'text-gray-400'
+        theme === 'retro' ? 'text-[#33ff33]' : theme === '8bit' ? 'text-[#ffffff]' : theme === 'kpop' ? 'text-pink-500' : 'text-gray-400'
       }`}>
         Profile Editor
       </h3>
       
-      {/* Avatar Upload */}
       <div className="flex items-center space-x-4 mb-4">
         <div 
           onClick={handleAvatarClick}
@@ -94,7 +95,9 @@ export default function ProfileEditor() {
               ? 'border-[#33ff33] bg-[#33ff33] text-black'
               : theme === 'rainy'
               ? 'border-[#4a6b8a] bg-[#2a3545]'
-              : 'border-[#ffffff] bg-[#ff0000] text-white'
+              : theme === '8bit'
+              ? 'border-[#ffffff] bg-[#ff0000] text-white'
+              : 'border-pink-300 bg-gradient-to-r from-pink-400 to-purple-400'
           }`}
         >
           {avatar ? (
@@ -113,7 +116,9 @@ export default function ProfileEditor() {
                 ? 'border-[#33ff33]/30 text-[#33ff33] hover:bg-[#003300]'
                 : theme === 'rainy'
                 ? 'border-[#4a6b8a]/30 text-[#a8b2c0] hover:bg-[#1a2533]'
-                : 'border-[#ffffff]/30 text-[#ffffff] hover:bg-[#1a1a1a]'
+                : theme === '8bit'
+                ? 'border-[#ffffff]/30 text-[#ffffff] hover:bg-[#1a1a1a]'
+                : 'border-pink-200 text-pink-500 hover:bg-pink-50'
             }`}
           >
             Upload photo
@@ -128,10 +133,9 @@ export default function ProfileEditor() {
         />
       </div>
 
-      {/* Name Input */}
       <div className="mb-4">
         <label className={`block text-sm mb-2 ${
-          theme === 'retro' ? 'text-[#33ff33]' : 'text-gray-400'
+          theme === 'retro' ? 'text-[#33ff33]' : theme === 'kpop' ? 'text-pink-400' : 'text-gray-400'
         }`}>
           Display Name
         </label>
@@ -147,12 +151,13 @@ export default function ProfileEditor() {
               ? 'bg-[#0a0a0a] text-[#33ff33] border-[#33ff33] focus:border-[#ffbf00]'
               : theme === 'rainy'
               ? 'bg-[#0a0e14]/50 text-[#a8b2c0] border-[#4a6b8a]/30 focus:border-[#6b8baa]'
-              : 'bg-[#000000] text-[#ffffff] border-[#ffffff] focus:border-[#ffff00]'
+              : theme === '8bit'
+              ? 'bg-[#000000] text-[#ffffff] border-[#ffffff] focus:border-[#ffff00]'
+              : 'bg-white text-gray-700 border-pink-200 focus:border-pink-400'
           }`}
         />
       </div>
 
-      {/* Save Button */}
       <button
         onClick={handleSaveProfile}
         disabled={isSaving}
@@ -163,7 +168,9 @@ export default function ProfileEditor() {
             ? 'bg-[#33ff33] text-black hover:bg-[#ffbf00]'
             : theme === 'rainy'
             ? 'bg-[#2a3545] text-[#a8b2c0] hover:bg-[#3a4555]'
-            : 'bg-[#ff0000] text-white hover:bg-[#ffff00] hover:text-black'
+            : theme === '8bit'
+            ? 'bg-[#ff0000] text-white hover:bg-[#ffff00] hover:text-black'
+            : 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
         }`}
       >
         {isSaving ? 'Saving...' : 'Save Profile'}

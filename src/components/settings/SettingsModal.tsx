@@ -17,10 +17,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
-      {/* Лёгкое затемнение 10% */}
       <div className="absolute inset-0 bg-black/10" />
       
-      {/* Modal - останавливаем всплытие клика */}
       <div 
         onClick={(e) => e.stopPropagation()}
         className={`relative z-10 w-full max-w-md p-6 border overflow-y-auto max-h-[90vh] ${
@@ -30,7 +28,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             ? 'bg-[#0a0a0a]/90 border-[#33ff33] shadow-[0_0_50px_rgba(51,255,51,0.3)]'
             : theme === 'rainy'
             ? 'bg-[#1a2533]/90 border-[#4a6b8a]/50 shadow-[0_0_50px_rgba(74,107,138,0.3)]'
-            : 'bg-[#000000]/90 border-[#ffffff] shadow-[0_0_50px_rgba(255,255,255,0.5)]'
+            : theme === '8bit'
+            ? 'bg-[#000000]/90 border-[#ffffff] shadow-[0_0_50px_rgba(255,255,255,0.5)]'
+            : 'bg-white/95 border-pink-300/50 shadow-[0_0_50px_rgba(255,107,157,0.3)]'
         }`}
       >
         
@@ -43,7 +43,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               ? 'text-[#33ff33] glow-green'
               : theme === 'rainy'
               ? 'text-[#a8b2c0]'
-              : 'text-[#ffffff]'
+              : theme === '8bit'
+              ? 'text-[#ffffff]'
+              : 'text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500'
           }`}>
             Settings
           </h2>
@@ -57,13 +59,8 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           </button>
         </div>
 
-        {/* Profile Editor */}
         <ProfileEditor />
-
-        {/* Theme Selection */}
         <ThemeSelector />
-
-        {/* Logout Button */}
         <LogoutButton />
       </div>
     </div>

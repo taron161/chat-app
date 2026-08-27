@@ -31,6 +31,8 @@ function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState('');
+  const [lastMessageId, setLastMessageId] = useState<string | null>(null);
+  const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadMessages = async () => {
     try {
@@ -39,10 +41,34 @@ function Home() {
       
       if (data.messages) {
         setMessages(data.messages);
+        if (data.messages.length > 0) {
+          setLastMessageId(data.messages[data.messages.length - 1].id);
+        }
       }
     } catch (error) {
       console.error('Error loading messages:', error);
       setError('Failed to load messages');
+    }
+  };
+
+  const loadNewMessages = async () => {
+    try {
+      const response = await fetch('/api/messages?after=' + (lastMessageId || ''));
+      const data = await response.json();
+      
+      if (data.messages && data.messages.length > 0) {
+        setMessages(prevMessages => {
+          const existingIds = new Set(prevMessages.map(m => m.id));
+          const newMessages = data.messages.filter((m: Message) => !existingIds.has(m.id));
+          const updatedMessages = [...prevMessages, ...newMessages];
+          if (updatedMessages.length > 0) {
+            setLastMessageId(updatedMessages[updatedMessages.length - 1].id);
+          }
+          return updatedMessages;
+        });
+      }
+    } catch (error) {
+      console.error('Error loading new messages:', error);
     }
   };
 
@@ -59,8 +85,19 @@ function Home() {
   useEffect(() => {
     if (mounted && user) {
       loadMessages();
+      
+      // Запускаем polling каждые 2 секунды
+      pollingIntervalRef.current = setInterval(() => {
+        loadNewMessages();
+      }, 2000);
     }
-  }, [mounted, user]);
+    
+    return () => {
+      if (pollingIntervalRef.current) {
+        clearInterval(pollingIntervalRef.current);
+      }
+    };
+  }, [mounted, user, lastMessageId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -88,6 +125,7 @@ function Home() {
 
       if (data.message) {
         setMessages(prevMessages => [...prevMessages, data.message]);
+        setLastMessageId(data.message.id);
         setInputValue('');
       }
     } catch (error) {
@@ -205,7 +243,7 @@ function Home() {
           {/* User Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
-            className={`flex cursor-pointer items-center space-x-2 px-3 py-2 border transition-all ${styles.userButton} ${
+            className={`flex items-center space-x-2 px-3 py-2 border transition-all ${styles.userButton} ${
               theme === 'cyberpunk' 
                 ? 'border-cyan-500/30' 
                 : theme === 'retro'

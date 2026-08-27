@@ -1,23 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const messages = await prisma.message.findMany({
-      include: {
-        user: {
-          select: {
-            id: true,
-            username: true,
-            name: true,
-            avatar: true,
+    const searchParams = request.nextUrl.searchParams;
+    const after = searchParams.get('after');
+    
+    let messages;
+    
+    if (after) {
+      // Загружаем только новые сообщения
+      const lastMessage = await prisma.message.findUnique({
+        where: { id: after },
+      });
+      
+      if (lastMessage) {
+        messages = await prisma.message.findMany({
+          where: {
+            createdAt: {
+              gt: lastMessage.createdAt,
+            },
+          },
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                name: true,
+                avatar: true,
+              },
+            },
+          },
+          orderBy: {
+            createdAt: 'asc',
+          },
+        });
+      } else {
+        messages = [];
+      }
+    } else {
+      // Загружаем все сообщения
+      messages = await prisma.message.findMany({
+        include: {
+          user: {
+            select: {
+              id: true,
+              username: true,
+              name: true,
+              avatar: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: 'asc',
-      },
-    });
+        orderBy: {
+          createdAt: 'asc',
+        },
+      });
+    }
 
     return NextResponse.json({ messages });
   } catch (error) {

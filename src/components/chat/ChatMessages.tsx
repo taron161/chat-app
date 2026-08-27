@@ -2,16 +2,17 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { Message } from '@/hooks/useMessages';
-import TypingIndicator from './TypingIndicator';
+import { TypingUser } from '@/hooks/useTyping';
 
 interface ChatMessagesProps {
   messages: Message[];
   styles: any;
   theme: string;
   error: string;
+  typingUsers: TypingUser[];
 }
 
-export default function ChatMessages({ messages, styles, theme, error }: ChatMessagesProps) {
+export default function ChatMessages({ messages, styles, theme, error, typingUsers }: ChatMessagesProps) {
   const { user } = useAuth();
 
   return (
@@ -25,7 +26,7 @@ export default function ChatMessages({ messages, styles, theme, error }: ChatMes
       {messages.length === 0 ? (
         <div className="flex items-center justify-center h-full">
           <div className={`text-xl animate-pulse ${styles.text}`}>
-            {theme === 'cyberpunk' ? 'NO MESSAGES...' : theme === 'retro' ? '> NO MESSAGES_' : theme === 'rainy' ? 'Silence... only rain outside...' : 'NO MESSAGES...'}
+            {theme === 'cyberpunk' ? 'NO MESSAGES...' : theme === 'retro' ? '> NO MESSAGES_' : theme === 'rainy' ? 'Silence... only rain outside...' : theme === '8bit' ? 'NO MESSAGES...' : 'NO MESSAGES...'}
           </div>
         </div>
       ) : (
@@ -42,7 +43,9 @@ export default function ChatMessages({ messages, styles, theme, error }: ChatMes
                   ? 'border-[#ffbf00] bg-[#33ff33] text-black'
                   : theme === 'rainy'
                   ? 'border-[#4a6b8a] bg-[#2a3545]'
-                  : 'border-[#ffffff] bg-[#ff0000] text-white'
+                  : theme === '8bit'
+                  ? 'border-[#ffffff] bg-[#ff0000] text-white'
+                  : 'border-pink-500 bg-gradient-to-r from-pink-500 to-purple-500'
               }`}>
                 {message.user?.avatar ? (
                   <img src={message.user.avatar} alt="Avatar" className="w-full h-full object-cover" />
@@ -70,7 +73,19 @@ export default function ChatMessages({ messages, styles, theme, error }: ChatMes
         ))
       )}
       
-      <TypingIndicator styles={styles} />
+      {typingUsers.length > 0 && (
+        <div className="flex items-center space-x-2">
+          <div className={`text-sm italic ${styles.typingColor}`}>
+            {typingUsers.map(u => u.name || u.username).join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing
+          </div>
+          <div className="flex space-x-1">
+            <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}>•</div>
+            <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}>•</div>
+            <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}>•</div>
+          </div>
+        </div>
+      )}
+      
       <div id="messages-end" />
     </div>
   );

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const after = searchParams.get('after');
     
-    let messages;
+    let messages: any[] = [];
     
     if (after) {
       // Загружаем только новые сообщения
@@ -35,8 +35,6 @@ export async function GET(request: NextRequest) {
             createdAt: 'asc',
           },
         });
-      } else {
-        messages = [];
       }
     } else {
       // Загружаем все сообщения

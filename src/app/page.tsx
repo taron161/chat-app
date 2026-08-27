@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -20,6 +20,13 @@ interface Message {
   createdAt: string;
 }
 
+interface TypingUser {
+  userId: string;
+  username: string;
+  name: string | null;
+  timestamp: number;
+}
+
 function Home() {
   const { user, isLoading } = useAuth();
   const { theme } = useTheme();
@@ -29,10 +36,12 @@ function Home() {
   const [mounted, setMounted] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<TypingUser[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [error, setError] = useState('');
   const [lastMessageId, setLastMessageId] = useState<string | null>(null);
   const pollingIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const loadMessages = async () => {
     try {
@@ -72,6 +81,41 @@ function Home() {
     }
   };
 
+  const loadTypingUsers = async () => {
+    try {
+      const response = await fetch('/api/typing');
+      const data = await response.json();
+      
+      if (data.typingUsers) {
+        // Фильтруем текущего пользователя
+        setTypingUsers(data.typingUsers.filter((u: TypingUser) => u.userId !== user?.id));
+      }
+    } catch (error) {
+      console.error('Error loading typing users:', error);
+    }
+  };
+
+  const sendTypingStatus = useCallback(async (isTyping: boolean) => {
+    if (!user) return;
+    
+    try {
+      await fetch('/api/typing', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: user.id,
+          username: user.username,
+          name: user.name,
+          isTyping,
+        }),
+      });
+    } catch (error) {
+      console.error('Error sending typing status:', error);
+    }
+  }, [user]);
+
   useEffect(() => {
     setMounted(true);
   }, []);
@@ -89,6 +133,7 @@ function Home() {
       // Запускаем polling каждые 2 секунды
       pollingIntervalRef.current = setInterval(() => {
         loadNewMessages();
+        loadTypingUsers();
       }, 2000);
     }
     
@@ -96,18 +141,45 @@ function Home() {
       if (pollingIntervalRef.current) {
         clearInterval(pollingIntervalRef.current);
       }
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
     };
   }, [mounted, user, lastMessageId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, typingUsers]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    
+    // Отправляем статус "печатает"
+    if (e.target.value.length > 0) {
+      sendTypingStatus(true);
+      
+      // Сбрасываем таймер
+      if (typingTimeoutRef.current) {
+        clearTimeout(typingTimeoutRef.current);
+      }
+      
+      // Через 2 секунды бездействия отправляем "не печатает"
+      typingTimeoutRef.current = setTimeout(() => {
+        sendTypingStatus(false);
+      }, 2000);
+    } else {
+      sendTypingStatus(false);
+    }
+  };
 
   const handleSend = async () => {
     if (!inputValue.trim() || !user || isSending) return;
 
     setIsSending(true);
     setError('');
+    
+    // Отправляем статус "не печатает"
+    sendTypingStatus(false);
 
     try {
       const response = await fetch('/api/messages', {
@@ -166,6 +238,7 @@ function Home() {
           messageOther: 'bg-[#1a1a2e]/80 border-purple-500/50',
           userButton: 'hover:bg-cyan-500/20',
           avatarBg: 'bg-gradient-to-r from-purple-600 to-cyan-600',
+          typingColor: 'text-cyan-400',
         };
       case 'retro':
         return {
@@ -180,6 +253,7 @@ function Home() {
           messageOther: 'border-[#ffbf00] bg-[#1a1a00]',
           userButton: 'hover:bg-[#003300]',
           avatarBg: 'bg-[#33ff33] text-black',
+          typingColor: 'text-[#33ff33]',
         };
       case 'rainy':
         return {
@@ -194,6 +268,7 @@ function Home() {
           messageOther: 'border-[#3a4555]/30 bg-[#1a2028]/40',
           userButton: 'hover:bg-[#1a2533]',
           avatarBg: 'bg-[#2a3545]',
+          typingColor: 'text-[#8b95a5]',
         };
       case '8bit':
         return {
@@ -208,6 +283,7 @@ function Home() {
           messageOther: 'border-[#ffffff] bg-[#1a1a1a]',
           userButton: 'hover:bg-[#ff0000]',
           avatarBg: 'bg-[#ff0000] text-white',
+          typingColor: 'text-[#ffff00]',
         };
       default:
         return {
@@ -222,6 +298,7 @@ function Home() {
           messageOther: 'bg-[#1a1a2e]/80 border-purple-500/50',
           userButton: 'hover:bg-cyan-500/20',
           avatarBg: 'bg-gradient-to-r from-purple-600 to-cyan-600',
+          typingColor: 'text-cyan-400',
         };
     }
   };
@@ -240,7 +317,6 @@ function Home() {
             </h1>
           </div>
           
-          {/* User Button */}
           <button
             onClick={() => setIsSettingsOpen(true)}
             className={`flex items-center space-x-2 px-3 py-2 border transition-all ${styles.userButton} ${
@@ -329,6 +405,21 @@ function Home() {
               </div>
             ))
           )}
+          
+          {/* Typing indicator */}
+          {typingUsers.length > 0 && (
+            <div className="flex items-center space-x-2">
+              <div className={`text-sm italic ${styles.typingColor}`}>
+                {typingUsers.map(u => u.name || u.username).join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing
+              </div>
+              <div className="flex space-x-1">
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}>•</div>
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}>•</div>
+                <div className="w-2 h-2 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}>•</div>
+              </div>
+            </div>
+          )}
+          
           <div ref={messagesEndRef} />
         </div>
 
@@ -338,7 +429,7 @@ function Home() {
             <input
               type="text"
               value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              onChange={handleInputChange}
               onKeyPress={handleKeyPress}
               placeholder="Type a message..."
               disabled={isSending}
@@ -355,7 +446,6 @@ function Home() {
         </div>
       </div>
 
-      {/* Settings Modal */}
       <SettingsModal 
         isOpen={isSettingsOpen} 
         onClose={() => setIsSettingsOpen(false)} 

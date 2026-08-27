@@ -1,0 +1,246 @@
+/* 8-Bit Theme Styles */
+body.theme-8bit {
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  background: #000000;
+  color: #ffffff;
+  image-rendering: pixelated;
+}
+
+/* 8-Bit Scrollbar */
+body.theme-8bit ::-webkit-scrollbar {
+  width: 20px;
+}
+
+body.theme-8bit ::-webkit-scrollbar-track {
+  background: #000000;
+  border: 3px solid #ffffff;
+  box-shadow: 
+    inset 0 0 0 2px #000000,
+    inset 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+body.theme-8bit ::-webkit-scrollbar-thumb {
+  background: #ff0000;
+  border: 3px solid #ffffff;
+  box-shadow: 
+    inset 0 0 0 2px #000000,
+    0 0 10px rgba(255, 0, 0, 0.8);
+  animation: pixel-scrollbar 1s steps(2) infinite;
+}
+
+body.theme-8bit ::-webkit-scrollbar-thumb:hover {
+  background: #ffff00;
+  box-shadow: 
+    inset 0 0 0 2px #000000,
+    0 0 15px rgba(255, 255, 0, 0.9);
+  animation: pixel-scrollbar-hover 0.5s steps(2) infinite;
+}
+
+@keyframes pixel-scrollbar {
+  0% { transform: scaleX(1); }
+  50% { transform: scaleX(0.95); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes pixel-scrollbar-hover {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+  100% { transform: translateX(0); }
+}
+
+/* Pixel Effects - для всех страниц */
+.pixel-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.floating-pixel {
+  position: absolute;
+  animation: float-pixel linear infinite;
+  text-shadow: 0 0 5px currentColor;
+}
+
+@keyframes float-pixel {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100px, -100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.pixel-sun {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  animation: pixel-rotate 10s steps(8) infinite;
+}
+
+.sun-grid {
+  display: inline-block;
+}
+
+.sun-row {
+  display: flex;
+}
+
+.sun-pixel {
+  width: 15px;
+  height: 15px;
+  background: transparent;
+}
+
+.sun-pixel.active {
+  background: #ffff00;
+  box-shadow: 
+    0 0 10px #ffff00,
+    0 0 20px #ffff00,
+    0 0 30px #ff8800;
+  animation: sun-glow 0.5s steps(2) infinite;
+}
+
+@keyframes sun-glow {
+  0% { opacity: 1; }
+  50% { opacity: 0.8; }
+  100% { opacity: 1; }
+}
+
+@keyframes pixel-rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pixel-cloud {
+  position: absolute;
+  animation: cloud-move linear infinite;
+}
+
+.cloud-grid {
+  display: inline-block;
+}
+
+.cloud-row {
+  display: flex;
+}
+
+.cloud-pixel {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+}
+
+.cloud-pixel.active {
+  background: #ffffff;
+  box-shadow: 
+    inset 0 0 0 2px #cccccc,
+    0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+@keyframes cloud-move {
+  0% {
+    transform: translateX(-200px);
+  }
+  100% {
+    transform: translateX(calc(100vw + 200px));
+  }
+}
+
+/* Mobile Particle Effects (<=1024px) - только для главной */
+@media (max-width: 1024px) {
+  .mobile-particles {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .rising-particle {
+    position: absolute;
+    bottom: -20px;
+    animation: rise-particle linear infinite;
+    text-shadow: 0 0 3px currentColor;
+  }
+
+  @keyframes rise-particle {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-90vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .header-pixel-figures {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+  }
+
+  .pixel-figure {
+    width: 20px;
+    height: 20px;
+    animation-duration: 1s;
+    animation-timing-function: steps(2);
+    animation-iteration-count: infinite;
+  }
+
+  .pixel-figure-spin {
+    animation-name: figure-spin;
+  }
+
+  @keyframes figure-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .pixel-figure-pulse {
+    animation-name: figure-pulse;
+  }
+
+  @keyframes figure-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  .pixel-figure-grid {
+    display: inline-block;
+  }
+
+  .pixel-figure-row {
+    display: flex;
+  }
+
+  .pixel-figure-cell {
+    width: 4px;
+    height: 4px;
+    background: transparent;
+  }
+}

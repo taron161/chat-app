@@ -1,0 +1,246 @@
+/* K-pop Theme Styles */
+body.theme-kpop {
+  font-family: 'Poppins', 'Noto Sans KR', sans-serif;
+  background: #fff5f7;
+  color: #4a4a4a;
+}
+
+/* K-pop Scrollbar */
+body.theme-kpop ::-webkit-scrollbar {
+  width: 7px;
+}
+
+body.theme-kpop ::-webkit-scrollbar-track {
+  background: #ffe4e8;
+  border-radius: 4px;
+}
+
+body.theme-kpop ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff6b9d, #c44569, #ff6b9d);
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(255, 107, 157, 0.3);
+}
+
+body.theme-kpop ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff85b3, #ff6b9d, #ff85b3);
+  box-shadow: 0 0 8px rgba(255, 107, 157, 0.5);
+}
+
+/* K-pop Equalizer - для всех версий */
+.kpop-equalizer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.5;
+}
+
+.kpop-eq-bar {
+  width: 4px;
+  background: linear-gradient(180deg, #ff6b9d, #c44569);
+  border-radius: 2px 2px 0 0;
+  animation: eq-bounce 1s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+@keyframes eq-bounce {
+  0%, 100% {
+    height: 5px;
+  }
+  25% {
+    height: 15px;
+  }
+  50% {
+    height: 8px;
+  }
+  75% {
+    height: 18px;
+  }
+}
+
+/* Desktop K-pop Effects (>1024px) */
+@media (min-width: 1025px) {
+  .kpop-effects {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .kpop-heart {
+    position: absolute;
+    animation: float-heart linear infinite;
+    opacity: 0.3;
+  }
+
+  @keyframes float-heart {
+    0% {
+      transform: translateY(100vh) rotate(0deg) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.3;
+    }
+    90% {
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateY(-100px) rotate(360deg) scale(1);
+      opacity: 0;
+    }
+  }
+
+  .kpop-sparkle {
+    position: absolute;
+    animation: sparkle-twinkle 2s ease-in-out infinite;
+  }
+
+  @keyframes sparkle-twinkle {
+    0%, 100% {
+      opacity: 0;
+      transform: scale(0);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .kpop-star {
+    position: absolute;
+    animation: star-spin 5s linear infinite;
+  }
+
+  @keyframes star-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+/* Mobile/Tablet K-pop Effects (<=1024px) */
+@media (max-width: 1024px) {
+  .kpop-effects-mobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  .kpop-heart-mobile {
+    position: absolute;
+    bottom: -20px;
+    animation: float-heart-mobile linear infinite;
+    opacity: 0.3;
+  }
+
+  @keyframes float-heart-mobile {
+    0% {
+      transform: translateY(0) rotate(0deg) scale(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.3;
+    }
+    90% {
+      opacity: 0.3;
+    }
+    100% {
+      transform: translateY(-90vh) rotate(360deg) scale(1);
+      opacity: 0;
+    }
+  }
+
+  .kpop-header-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  .kpop-mic {
+    position: absolute;
+    top: 50%;
+    animation: mic-bounce 1s ease-in-out infinite;
+  }
+
+  @keyframes mic-bounce {
+    0%, 100% {
+      transform: translateY(0) rotate(-10deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(10deg);
+    }
+  }
+
+  .kpop-note {
+    position: absolute;
+    top: 30%;
+    animation: note-float 2s ease-in-out infinite;
+  }
+
+  @keyframes note-float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(-15px) rotate(20deg);
+      opacity: 1;
+    }
+  }
+
+  .kpop-star-header {
+    position: absolute;
+    top: 20%;
+    animation: star-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes star-pulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    50% {
+      transform: scale(1.3);
+      opacity: 1;
+    }
+  }
+
+  .kpop-instrument {
+    position: absolute;
+    top: 60%;
+    animation: instrument-swing 2s ease-in-out infinite;
+  }
+
+  @keyframes instrument-swing {
+    0%, 100% {
+      transform: rotate(-15deg);
+    }
+    50% {
+      transform: rotate(15deg);
+    }
+  }
+}

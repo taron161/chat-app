@@ -7,6 +7,7 @@ const themes: { id: ThemeType; label: string; icon: string; description: string 
   { id: 'retro', label: 'Retro', icon: '🕹️', description: 'Classic terminal aesthetics' },
   { id: 'rainy', label: 'Rainy', icon: '🌧️', description: 'Melancholic rainy atmosphere' },
   { id: '8bit', label: '8-Bit', icon: '👾', description: 'Retro pixel art style' },
+  { id: 'kpop', label: 'K-pop', icon: '🎤', description: 'Cute and colorful Korean pop style' },
 ];
 
 export default function ThemeSelector() {

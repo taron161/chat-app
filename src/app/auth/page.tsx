@@ -85,6 +85,16 @@ export default function AuthPage() {
           text: 'text-[#ffffff]',
           link: 'text-[#ffffff] hover:text-[#ffff00]',
         };
+      case 'kpop':
+        return {
+          bg: 'bg-[#fff5f7]',
+          card: 'bg-white/90 border-pink-300/50 shadow-[0_0_50px_rgba(255,107,157,0.3)]',
+          title: 'text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500',
+          input: 'bg-white text-gray-700 border-pink-200 focus:border-pink-400',
+          button: 'bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600',
+          text: 'text-gray-500',
+          link: 'text-pink-500 hover:text-pink-600',
+        };
       default:
         return {
           bg: 'bg-[#0a0a0f]',

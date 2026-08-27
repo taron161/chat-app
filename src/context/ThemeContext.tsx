@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
-export type ThemeType = 'cyberpunk' | 'retro' | 'rainy' | '8bit';
+export type ThemeType = 'cyberpunk' | 'retro' | 'rainy' | '8bit' | 'kpop';
 
 interface ThemeContextType {
   theme: ThemeType;
@@ -15,7 +15,7 @@ const getStoredTheme = (): ThemeType => {
   if (typeof window === 'undefined') return 'cyberpunk';
   
   const storedTheme = localStorage.getItem('chat_theme');
-  if (storedTheme === 'cyberpunk' || storedTheme === 'retro' || storedTheme === 'rainy' || storedTheme === '8bit') {
+  if (storedTheme === 'cyberpunk' || storedTheme === 'retro' || storedTheme === 'rainy' || storedTheme === '8bit' || storedTheme === 'kpop') {
     return storedTheme;
   }
   return 'cyberpunk';
@@ -25,7 +25,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemeType>(() => getStoredTheme());
 
   useEffect(() => {
-    document.body.classList.remove('theme-cyberpunk', 'theme-retro', 'theme-rainy', 'theme-8bit');
+    document.body.classList.remove('theme-cyberpunk', 'theme-retro', 'theme-rainy', 'theme-8bit', 'theme-kpop');
     document.body.classList.add(`theme-${theme}`);
     localStorage.setItem('chat_theme', theme);
   }, [theme]);

@@ -50,7 +50,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    console.log('Login attempt...');
+    console.log('=== LOGIN ATTEMPT ===');
+    console.log('Username:', username);
     setIsLoading(true);
     
     try {
@@ -63,21 +64,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       console.log('Login response status:', response.status);
+      console.log('Login response ok:', response.ok);
       
       const data = await response.json();
-      console.log('Login data:', data);
+      console.log('Login data FULL:', JSON.stringify(data, null, 2));
       
       if (data.user) {
-        console.log('Saving user...');
+        console.log('Login successful, saving user...');
         setUser(data.user);
         localStorage.setItem('cyber_user', JSON.stringify(data.user));
-        console.log('User saved');
         return true;
       }
       
+      console.log('Login failed:', data.error || 'Unknown error');
       return false;
     } catch (error) {
       console.error('Login error:', error);
+      console.error('Login error details:', JSON.stringify(error, null, 2));
       return false;
     } finally {
       setIsLoading(false);
@@ -85,7 +88,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (username: string, password: string): Promise<boolean> => {
-    console.log('Registration attempt...');
+    console.log('=== REGISTRATION ATTEMPT ===');
+    console.log('Username:', username);
     setIsLoading(true);
     
     try {
@@ -98,21 +102,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       console.log('Registration response status:', response.status);
+      console.log('Registration response ok:', response.ok);
       
       const data = await response.json();
-      console.log('Registration data:', data);
+      console.log('Registration data FULL:', JSON.stringify(data, null, 2));
       
       if (data.user) {
-        console.log('Saving user...');
+        console.log('Registration successful, saving user...');
         setUser(data.user);
         localStorage.setItem('cyber_user', JSON.stringify(data.user));
-        console.log('User saved');
         return true;
       }
       
+      console.log('Registration failed:', data.error || 'Unknown error');
       return false;
     } catch (error) {
       console.error('Registration error:', error);
+      console.error('Registration error details:', JSON.stringify(error, null, 2));
       return false;
     } finally {
       setIsLoading(false);
@@ -121,6 +127,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const updateProfile = async (name: string, avatar: string): Promise<boolean> => {
     if (!user) return false;
+    
+    console.log('=== UPDATE PROFILE ===');
+    console.log('Name:', name);
+    console.log('Avatar length:', avatar.length);
     
     try {
       const response = await fetch('/api/user/update', {
@@ -135,23 +145,29 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }),
       });
 
+      console.log('Update response status:', response.status);
+      
       const data = await response.json();
+      console.log('Update data FULL:', JSON.stringify(data, null, 2));
 
       if (data.user) {
+        console.log('Profile updated successfully');
         setUser(data.user);
         localStorage.setItem('cyber_user', JSON.stringify(data.user));
         return true;
       }
       
+      console.log('Profile update failed:', data.error || 'Unknown error');
       return false;
     } catch (error) {
       console.error('Error updating profile:', error);
+      console.error('Update error details:', JSON.stringify(error, null, 2));
       return false;
     }
   };
 
   const logout = () => {
-    console.log('Logging out...');
+    console.log('=== LOGOUT ===');
     setUser(null);
     localStorage.removeItem('cyber_user');
     router.push('/auth');

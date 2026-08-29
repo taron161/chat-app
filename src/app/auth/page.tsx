@@ -90,6 +90,16 @@ function AuthPage() {
           text: 'text-gray-500',
           link: 'text-pink-500 hover:text-pink-600',
         };
+      case 'mechanical':
+        return {
+          bg: 'bg-[#1a1a1a]',
+          card: 'bg-[#2a2a2a] border-[#4a4a4a] shadow-[0_0_30px_rgba(0,0,0,0.5)]',
+          title: 'text-[#00ff88]',
+          input: 'bg-[#1a1a1a] text-[#e0e0e0] border-[#4a4a4a] focus:border-[#00ff88]',
+          button: 'bg-[#4a4a4a] text-[#e0e0e0] hover:bg-[#5a5a5a] border-[#5a5a5a]',
+          text: 'text-[#6a6a6a]',
+          link: 'text-[#6a6a6a] hover:text-[#00ff88]',
+        };
       default:
         return {
           bg: 'bg-[#0a0a0f]',
@@ -111,7 +121,7 @@ function AuthPage() {
         
         <div className="text-center mb-8">
           <div className="text-6xl mb-4 opacity-50">
-            {theme === 'cyberpunk' ? '🌆' : theme === 'retro' ? '🕹️' : theme === 'rainy' ? '🌧️' : theme === '8bit' ? '👾' : '🎤'}
+            {theme === 'cyberpunk' ? '🌆' : theme === 'retro' ? '🕹️' : theme === 'rainy' ? '🌧️' : theme === '8bit' ? '👾' : theme === 'kpop' ? '🎤' : '⌨️'}
           </div>
           <h1 className={`text-3xl font-bold mb-2 ${styles.title}`}>
             {mode === 'login' ? 'System Access' : 'Registration'}

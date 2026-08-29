@@ -30,11 +30,12 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
             ? 'bg-[#1a2533]/90 border-[#4a6b8a]/50 shadow-[0_0_50px_rgba(74,107,138,0.3)]'
             : theme === '8bit'
             ? 'bg-[#000000]/90 border-[#ffffff] shadow-[0_0_50px_rgba(255,255,255,0.5)]'
-            : 'bg-white/95 border-pink-300/50 shadow-[0_0_50px_rgba(255,107,157,0.3)]'
+            : theme === 'kpop'
+            ? 'bg-white/95 border-pink-300/50 shadow-[0_0_50px_rgba(255,107,157,0.3)]'
+            : 'bg-[#2a2a2a]/95 border-[#4a4a4a] shadow-[0_0_30px_rgba(0,0,0,0.5)]'
         }`}
       >
         
-        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className={`text-xl font-bold ${
             theme === 'cyberpunk'
@@ -45,7 +46,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               ? 'text-[#a8b2c0]'
               : theme === '8bit'
               ? 'text-[#ffffff]'
-              : 'text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500'
+              : theme === 'kpop'
+              ? 'text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-500'
+              : 'text-[#00ff88]'
           }`}>
             Settings
           </h2>

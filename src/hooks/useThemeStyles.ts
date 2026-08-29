@@ -1,11 +1,12 @@
 'use client';
 
 import { useTheme } from '@/context/ThemeContext';
+import { ThemeStyles } from '@/types/theme';
 
 export function useThemeStyles() {
   const { theme } = useTheme();
 
-  const getThemeStyles = () => {
+  const getThemeStyles = (): ThemeStyles => {
     switch (theme) {
       case 'cyberpunk':
         return {
@@ -81,6 +82,21 @@ export function useThemeStyles() {
           userButton: 'hover:bg-pink-100',
           avatarBg: 'bg-gradient-to-r from-pink-500 to-purple-500',
           typingColor: 'text-pink-500',
+        };
+      case 'mechanical':
+        return {
+          bg: 'bg-[#1a1a1a]',
+          container: 'bg-[#2a2a2a] border-[#4a4a4a] shadow-[0_0_30px_rgba(0,0,0,0.5)]',
+          header: 'border-[#3a3a3a] bg-[#2a2a2a]',
+          title: 'text-[#00ff88]',
+          text: 'text-[#e0e0e0]',
+          inputBg: 'bg-[#1a1a1a] placeholder-[#6a6a6a] border-[#4a4a4a] focus:border-[#00ff88]',
+          button: 'bg-[#4a4a4a] text-[#e0e0e0] hover:bg-[#5a5a5a] border-[#5a5a5a]',
+          messageUser: 'border-[#00ff88] bg-[#2a3a2a]',
+          messageOther: 'border-[#4a4a4a] bg-[#2a2a2a]',
+          userButton: 'hover:bg-[#3a3a3a]',
+          avatarBg: 'bg-[#4a4a4a]',
+          typingColor: 'text-[#00ff88]',
         };
       default:
         return {

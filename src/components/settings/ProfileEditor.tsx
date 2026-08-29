@@ -77,10 +77,12 @@ export default function ProfileEditor() {
         ? 'border-[#4a6b8a]/30 bg-[#1a2533]/50'
         : theme === '8bit'
         ? 'border-[#ffffff] bg-[#1a1a1a]'
-        : 'border-pink-200 bg-pink-50/50'
+        : theme === 'kpop'
+        ? 'border-pink-200 bg-pink-50/50'
+        : 'border-[#4a4a4a] bg-[#2a2a2a]'
     }`}>
       <h3 className={`text-sm font-bold mb-3 uppercase ${
-        theme === 'retro' ? 'text-[#33ff33]' : theme === '8bit' ? 'text-[#ffffff]' : theme === 'kpop' ? 'text-pink-500' : 'text-gray-400'
+        theme === 'retro' ? 'text-[#33ff33]' : theme === '8bit' ? 'text-[#ffffff]' : theme === 'kpop' ? 'text-pink-500' : theme === 'mechanical' ? 'text-[#00ff88]' : 'text-gray-400'
       }`}>
         Profile Editor
       </h3>
@@ -97,7 +99,9 @@ export default function ProfileEditor() {
               ? 'border-[#4a6b8a] bg-[#2a3545]'
               : theme === '8bit'
               ? 'border-[#ffffff] bg-[#ff0000] text-white'
-              : 'border-pink-300 bg-gradient-to-r from-pink-400 to-purple-400'
+              : theme === 'kpop'
+              ? 'border-pink-300 bg-gradient-to-r from-pink-400 to-purple-400'
+              : 'border-[#00ff88] bg-[#2a3a2a]'
           }`}
         >
           {avatar ? (
@@ -118,7 +122,9 @@ export default function ProfileEditor() {
                 ? 'border-[#4a6b8a]/30 text-[#a8b2c0] hover:bg-[#1a2533]'
                 : theme === '8bit'
                 ? 'border-[#ffffff]/30 text-[#ffffff] hover:bg-[#1a1a1a]'
-                : 'border-pink-200 text-pink-500 hover:bg-pink-50'
+                : theme === 'kpop'
+                ? 'border-pink-200 text-pink-500 hover:bg-pink-50'
+                : 'border-[#4a4a4a] text-[#00ff88] hover:bg-[#2a3a2a]'
             }`}
           >
             Upload photo
@@ -135,7 +141,7 @@ export default function ProfileEditor() {
 
       <div className="mb-4">
         <label className={`block text-sm mb-2 ${
-          theme === 'retro' ? 'text-[#33ff33]' : theme === 'kpop' ? 'text-pink-400' : 'text-gray-400'
+          theme === 'retro' ? 'text-[#33ff33]' : theme === 'kpop' ? 'text-pink-400' : theme === 'mechanical' ? 'text-[#00ff88]' : 'text-gray-400'
         }`}>
           Display Name
         </label>
@@ -153,7 +159,9 @@ export default function ProfileEditor() {
               ? 'bg-[#0a0e14]/50 text-[#a8b2c0] border-[#4a6b8a]/30 focus:border-[#6b8baa]'
               : theme === '8bit'
               ? 'bg-[#000000] text-[#ffffff] border-[#ffffff] focus:border-[#ffff00]'
-              : 'bg-white text-gray-700 border-pink-200 focus:border-pink-400'
+              : theme === 'kpop'
+              ? 'bg-white text-gray-700 border-pink-200 focus:border-pink-400'
+              : 'bg-[#1a1a1a] text-[#e0e0e0] border-[#4a4a4a] focus:border-[#00ff88]'
           }`}
         />
       </div>
@@ -170,7 +178,9 @@ export default function ProfileEditor() {
             ? 'bg-[#2a3545] text-[#a8b2c0] hover:bg-[#3a4555]'
             : theme === '8bit'
             ? 'bg-[#ff0000] text-white hover:bg-[#ffff00] hover:text-black'
-            : 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
+            : theme === 'kpop'
+            ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
+            : 'bg-[#4a4a4a] text-[#e0e0e0] hover:bg-[#5a5a5a] border border-[#5a5a5a]'
         }`}
       >
         {isSaving ? 'Saving...' : 'Save Profile'}

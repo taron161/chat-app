@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeStyles } from "@/types/theme";
+import { ThemeStyles } from '@/types/theme';
 
 interface ChatInputProps {
   value: string;
@@ -29,14 +29,22 @@ export default function ChatInput({ value, onChange, onSend, isSending, styles, 
           onKeyPress={handleKeyPress}
           placeholder="Type a message..."
           disabled={isSending}
-          className={`flex-1 px-4 py-3 border focus:outline-none transition-all disabled:opacity-50 ${styles.inputBg}`}
+          className={`flex-1 px-4 py-3 border focus:outline-none transition-all disabled:opacity-50 ${
+            theme === 'mechanical' 
+              ? 'mechanical-input' 
+              : styles.inputBg
+          }`}
         />
         <button
           onClick={onSend}
           disabled={isSending}
-          className={`px-6 py-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${styles.button}`}
+          className={`px-6 py-3 font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed ${
+            theme === 'mechanical' 
+              ? 'mech-keycap' 
+              : styles.button
+          }`}
         >
-          {isSending ? '...' : theme === 'retro' ? '[SEND]' : 'SEND'}
+          {isSending ? '...' : theme === 'retro' ? '[SEND]' : theme === 'mechanical' ? '[ SEND ]' : 'SEND'}
         </button>
       </div>
     </div>
